@@ -166,6 +166,29 @@ def add_biomes(grid):
 grid = add_biomes(grid)
 
 # ...
+from gameplay_mechanics import Settlement
+
+
+# Initialize an empty list to hold all the settlements
+settlements = []
+
+# Inside the main game loop, add the following code to handle mouse clicks
+for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+        running = False
+    elif event.type == pygame.MOUSEBUTTONDOWN:
+        x, y = event.pos
+        grid_x, grid_y = x // 20, y // 20
+        tile_type = grid[grid_x][grid_y]
+        
+        # Create a new Settlement object and add it to the settlements list
+        new_settlement = Settlement(grid_x * 20 + 10, grid_y * 20 + 10, tile_type)
+        settlements.append(new_settlement)
+
+# Update the population for each settlement and draw them
+for settlement in settlements:
+    settlement.update_population()
+    settlement.draw(screen)
 # Main game loop
 while True:
     for event in pygame.event.get():
