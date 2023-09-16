@@ -227,5 +227,52 @@ while True:
             tile_type = grid[col][row]
             draw_hexagon(x, y, s, tile_type)
 
-    # Update the display
-    pygame.display.update()
+
+    # Function to find the hexagon under the mouse cursor
+    def find_hovered_hexagon(mouse_x, mouse_y):
+        for row in range(32):
+            for col in range(32):
+                x = col * dx
+                y = row * dy
+
+                # Stagger odd rows
+                if col % 2 == 1:
+                    y += dy / 2
+
+                distance = math.sqrt((x - mouse_x) ** 2 + (y - mouse_y) ** 2)
+                if distance < s:
+                    return (col, row)
+        return None
+
+
+    # Main game loop
+    while True:
+        # ... (Previous code remains the same)
+
+        # Check for mouse hover event
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        hovered_hexagon = find_hovered_hexagon(mouse_x, mouse_y)
+
+        if hovered_hexagon:
+            col, row = hovered_hexagon
+            x = col * dx
+            y = row * dy
+
+            # Stagger odd rows
+            if col % 2 == 1:
+                y += dy / 2
+
+            # Draw an outline around the hovered hexagon
+            pygame.draw.polygon(screen, (0, 0, 0),
+                                [(x + s * math.cos(math.radians(angle)), y + s * math.sin(math.radians(angle))) for
+                                 angle in range(0, 360, 60)], 1)
+
+            # Show a popup with biome type
+            font = pygame.font.Font(None, 36)
+            biome_text = font.render(str(grid[col][row]), True, (0, 0, 0))
+            screen.blit(biome_text, (mouse_x + 20, mouse_y))
+
+        # Update the display
+        pygame.display.update()
+# Update the display
+
